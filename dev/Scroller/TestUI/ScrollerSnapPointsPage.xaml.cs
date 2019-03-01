@@ -14,17 +14,16 @@ using Windows.UI.Xaml.Shapes;
 using Windows.UI.Xaml.Navigation;
 
 #if !BUILD_WINDOWS
-using ScrollerSnapPointBase = Microsoft.UI.Xaml.Controls.Primitives.ScrollerSnapPointBase;
-using ScrollerSnapPointRegular = Microsoft.UI.Xaml.Controls.Primitives.ScrollerSnapPointRegular;
-using ScrollerSnapPointIrregular = Microsoft.UI.Xaml.Controls.Primitives.ScrollerSnapPointIrregular;
-using ScrollerSnapPointAlignment = Microsoft.UI.Xaml.Controls.Primitives.ScrollerSnapPointAlignment;
+using SnapPointBase = Microsoft.UI.Xaml.Controls.Primitives.SnapPointBase;
+using ScrollSnapPoint = Microsoft.UI.Xaml.Controls.Primitives.ScrollSnapPoint;
+using RepeatedScrollSnapPoint = Microsoft.UI.Xaml.Controls.Primitives.RepeatedScrollSnapPoint;
+using SnapPointsAlignment = Microsoft.UI.Xaml.Controls.Primitives.SnapPointsAlignment;
 using Scroller = Microsoft.UI.Xaml.Controls.Primitives.Scroller;
-using ScrollerTestHooks = Microsoft.UI.Private.Controls.ScrollerTestHooks;
-using ScrollerSnapPointDimension = Microsoft.UI.Private.Controls.ScrollerSnapPointDimension;
 using AnimationMode = Microsoft.UI.Xaml.Controls.AnimationMode;
 using SnapPointsMode = Microsoft.UI.Xaml.Controls.SnapPointsMode;
 using ScrollOptions = Microsoft.UI.Xaml.Controls.ScrollOptions;
 
+using ScrollerTestHooks = Microsoft.UI.Private.Controls.ScrollerTestHooks;
 using MUXControlsTestHooks = Microsoft.UI.Private.Controls.MUXControlsTestHooks;
 using MUXControlsTestHooksLoggingMessageEventArgs = Microsoft.UI.Private.Controls.MUXControlsTestHooksLoggingMessageEventArgs;
 #endif
@@ -86,7 +85,7 @@ namespace MUXControlsTestApp
             try
             {
                 double value = Convert.ToDouble(txtMISnapPointValue.Text);
-                ScrollerSnapPointBase newSnapPoint = new ScrollerSnapPointIrregular(value, ScrollerSnapPointAlignment.Near);
+                ScrollSnapPoint newSnapPoint = new ScrollSnapPoint(value, SnapPointsAlignment.Near);
                 Color fillColor = GetNewColor();
                 ScrollerTestHooks.SetSnapPointVisualizationColor(newSnapPoint, fillColor);
                 markupScroller.VerticalSnapPoints.Add(newSnapPoint);
@@ -107,7 +106,7 @@ namespace MUXControlsTestApp
             {
                 double value = Convert.ToDouble(txtOISnapPointValue.Text);
                 double range = Convert.ToDouble(txtOIApplicableRange.Text);
-                ScrollerSnapPointBase newSnapPoint = new ScrollerSnapPointIrregular(value, range, ScrollerSnapPointAlignment.Near);
+                ScrollSnapPoint newSnapPoint = new ScrollSnapPoint(value, range, SnapPointsAlignment.Near);
                 Color fillColor = GetNewColor();
                 ScrollerTestHooks.SetSnapPointVisualizationColor(newSnapPoint, fillColor);
                 markupScroller.VerticalSnapPoints.Add(newSnapPoint);
@@ -130,7 +129,7 @@ namespace MUXControlsTestApp
                 double interval = Convert.ToDouble(txtMRSnapPointInterval.Text);
                 double start = Convert.ToDouble(txtMRSnapPointStart.Text);
                 double end = Convert.ToDouble(txtMRSnapPointEnd.Text);
-                ScrollerSnapPointBase newSnapPoint = new ScrollerSnapPointRegular(offset, interval, start, end, ScrollerSnapPointAlignment.Near);
+                RepeatedScrollSnapPoint newSnapPoint = new RepeatedScrollSnapPoint(offset, interval, start, end, SnapPointsAlignment.Near);
                 Color fillColor = GetNewColor();
                 ScrollerTestHooks.SetSnapPointVisualizationColor(newSnapPoint, fillColor);
                 markupScroller.VerticalSnapPoints.Add(newSnapPoint);
@@ -164,7 +163,7 @@ namespace MUXControlsTestApp
                 double start = Convert.ToDouble(txtORSnapPointStart.Text);
                 double end = Convert.ToDouble(txtORSnapPointEnd.Text);
 
-                ScrollerSnapPointBase newSnapPoint = new ScrollerSnapPointRegular(offset, interval, start, end, range, ScrollerSnapPointAlignment.Near);
+                RepeatedScrollSnapPoint newSnapPoint = new RepeatedScrollSnapPoint(offset, interval, start, end, range, SnapPointsAlignment.Near);
                 Color fillColor = GetNewColor();
                 ScrollerTestHooks.SetSnapPointVisualizationColor(newSnapPoint, fillColor);
                 markupScroller.VerticalSnapPoints.Add(newSnapPoint);
@@ -322,7 +321,7 @@ namespace MUXControlsTestApp
         private void FixConsolidatedView()
         {
             consolidatedView.Children.Clear();
-            foreach (ScrollerSnapPointBase snapPoint in ScrollerTestHooks.GetConsolidatedSnapPoints(markupScroller, ScrollerSnapPointDimension.Vertical))
+            foreach (SnapPointBase snapPoint in ScrollerTestHooks.GetConsolidatedVerticalScrollSnapPoints(markupScroller))
             {
                 Vector2 zone = ScrollerTestHooks.GetSnapPointActualApplicableZone(snapPoint);
                 zone.X = Math.Max(0, zone.X);
